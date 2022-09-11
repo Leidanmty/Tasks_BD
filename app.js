@@ -1,6 +1,7 @@
 const express = require("express");
 
 //Routers
+const { usersRoutes } = require("./routes/users.routes");
 
 //Init our Express app
 const app = express();
@@ -9,6 +10,7 @@ const app = express();
 app.use(express.json());
 
 //Define Endpoints
+app.use("/api/v1/users", usersRoutes);
 
 //Catch non-existing endpoints
 app.all("*", (req, res) => {
