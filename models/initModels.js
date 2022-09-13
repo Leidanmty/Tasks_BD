@@ -8,7 +8,10 @@ const initModels = () => {
   Task.belongsTo(User);
 
   //M Tasks < --- > 1 User
-  Task.belongsToMany(User, { foreignKey: "id" });
+  Task.belongsToMany(User, {
+    through: "id",
+    sourceKey: "id",
+  });
   User.hasMany(Task);
 };
 

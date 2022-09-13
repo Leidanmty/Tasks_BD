@@ -1,4 +1,5 @@
 //Models
+const { Task } = require("../models/tasks.model");
 const { User } = require("../models/users.model");
 
 //Creating endpoints functions
@@ -21,6 +22,11 @@ const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll({
       where: { status: "active" },
+      include: [
+        {
+          model: Task,
+        },
+      ],
     });
 
     res.status(200).json({
