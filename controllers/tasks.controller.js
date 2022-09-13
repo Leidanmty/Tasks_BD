@@ -51,17 +51,16 @@ const getTasksByStatus = async (req, res) => {
 };
 
 const updateTask = async (req, res) => {
-  try {
-    const { finishDate, limitDate } = req.body;
+  try {    
     const { task } = req;
 
     await task.update({ finishDate });
 
     if (finishDate !== null) {
-      if (Date.parse(limitDate) < Date.parse(finishDate)) {
-        await task.update({ status: "late" });
-      } else {
+      if (task.limitDate > task.finishDate) {
         await task.update({ status: "complete" });
+      } else {
+        await task.update({ status: "late" });
       }
     }
 

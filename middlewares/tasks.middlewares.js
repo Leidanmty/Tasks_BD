@@ -3,7 +3,7 @@ const { Task } = require("../models/tasks.model");
 const taskExist = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
+    const { status, finishDate, limitDate } = req.body;
     const stat = "active";
     const task = await Task.findOne({ where: { id } });
 
