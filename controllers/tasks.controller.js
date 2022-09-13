@@ -3,8 +3,8 @@ const { Task } = require("../models/tasks.model");
 //Creating endpoints functions
 const creatTask = async (req, res) => {
   try {
-    const { title, userId, startDate, limitDate } = req.body;
-    const newTask = await Task.create({ title, userId, startDate, limitDate });
+    const { title, userId, StartDate, limitDate } = req.body;
+    const newTask = await Task.create({ title, userId, StartDate, limitDate });
 
     res.status(201).json({
       status: "succes",
@@ -32,15 +32,11 @@ const getAllTask = async (req, res) => {
 
 const getTasksByStatus = async (req, res) => {
   try {
-    const { status } = req.body;
-
-    const taskStatus = await Task.findAll({
-      where: { status },
-    });
+    const { stats } = req;
 
     res.status(200).json({
       status: "succes",
-      data: { taskStatus },
+      data: { stats },
     });
   } catch (error) {
     console.log(error);
@@ -49,11 +45,18 @@ const getTasksByStatus = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const { title, finishDate } = req.body;
+    const { finishDate, limitDate } = req.body;
     const { task } = req;
 
-    await task.update({ title, finishDate });
-    await task.update({ status: cancelled });
+    await task.update({ finishDate });
+
+    if (finishDate !== null) {
+      if (Date.parse(limitDate) < Date.parse(finishDate)) {
+        await task.update({ status: "late" });
+      } else {
+        await task.update({ status: "complete" });
+      }
+    }
 
     res.status(200).json({
       status: "Succes",
@@ -68,7 +71,9 @@ const deleteTask = async (req, res) => {
   try {
     const { task } = req;
 
-    await task.update({ status: cancelled });
+    await task.update({ status: "cancelled" });
+
+    res.status(204).json({ status: "success" });
   } catch (error) {
     console.log(error);
   }

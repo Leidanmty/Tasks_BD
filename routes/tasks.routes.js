@@ -1,12 +1,28 @@
 const express = require("express");
 
 //Controllers
-const {} = require("../controllers/tasks.controller");
+const {
+  creatTask,
+  getAllTask,
+  getTasksByStatus,
+  updateTask,
+  deleteTask,
+} = require("../controllers/tasks.controller");
 
 //Middleware
-const {} = require("../middlewares/tasks.middlewares");
+const { taskExist, statusExist } = require("../middlewares/tasks.middlewares");
 
 //Routes
 const tasksRoutes = express.Router();
+
+tasksRoutes.post("/", creatTask);
+
+tasksRoutes.get("/", getAllTask);
+
+tasksRoutes.get("/:status", statusExist, getTasksByStatus);
+
+tasksRoutes.patch("/:id", taskExist, updateTask);
+
+tasksRoutes.delete("/:id", taskExist, deleteTask);
 
 module.exports = { tasksRoutes };
